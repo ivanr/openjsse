@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -183,10 +184,15 @@ final class SignatureAlgorithmsExtension {
             }
 
             // Produce the extension.
-            if (chc.localSupportedSignAlgs == null) {
-                chc.localSupportedSignAlgs =
-                    SignatureScheme.getSupportedAlgorithms(
-                            chc.algorithmConstraints, chc.activeProtocols);
+            if (chc.sslConfig.getSignatureAlgorithmsNames() != null) {
+                chc.localSupportedSignAlgs = SignatureSchemeMapper.schemesFromNames(
+                        chc.sslConfig.getSignatureAlgorithmsNames());
+            } else {
+                if (chc.localSupportedSignAlgs == null) {
+                    chc.localSupportedSignAlgs =
+                            SignatureScheme.getSupportedAlgorithms(
+                                    chc.algorithmConstraints, chc.activeProtocols);
+                }
             }
 
             int vectorLen = SignatureScheme.sizeInRecord() *

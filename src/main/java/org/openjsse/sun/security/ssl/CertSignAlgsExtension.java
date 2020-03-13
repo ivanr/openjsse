@@ -98,11 +98,19 @@ final class CertSignAlgsExtension {
             }
 
             // Produce the extension.
-            if (chc.localSupportedSignAlgs == null) {
-                chc.localSupportedSignAlgs =
-                    SignatureScheme.getSupportedAlgorithms(
+
+            // If there is explicit signature_algorithms_cert configuration,
+            // we override any existing configured algorithms.
+			if (chc.sslConfig.getSignatureAlgorithmsCertNames() != null) {
+				chc.localSupportedSignAlgs = SignatureSchemeMapper.schemesFromNames(
+				        chc.sslConfig.getSignatureAlgorithmsCertNames());
+			} else {
+				if (chc.localSupportedSignAlgs == null) {
+                    chc.localSupportedSignAlgs =
+                        SignatureScheme.getSupportedAlgorithms(
                             chc.algorithmConstraints, chc.activeProtocols);
-            }
+				}
+			}
 
             int vectorLen = SignatureScheme.sizeInRecord() *
                     chc.localSupportedSignAlgs.size();

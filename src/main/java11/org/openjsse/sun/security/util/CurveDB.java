@@ -26,6 +26,8 @@
 
 package org.openjsse.sun.security.util;
 
+import sun.security.util.NamedCurve;
+import java.util.Collection;
 import java.security.spec.*;
 import java.security.spec.ECParameterSpec;
 
@@ -33,13 +35,52 @@ import java.security.spec.ECParameterSpec;
  * Wrapper class for sun.security.util.CurveDB.lookup methods 
  */
 public class CurveDB {
+
     // Return a NamedCurve for the specified OID/name or null if unknown.
     public static ECParameterSpec lookup(String name) {
-        return sun.security.util.CurveDB.lookup(name);
+        Collection<? extends NamedCurve> curves = sun.security.util.CurveDB.getSupportedCurves();
+        for (NamedCurve nc : curves) {
+            if (nc.getName().startsWith(name)) {
+                return nc;
+            }
+        }
+        
+        return null;        
     }
+    
     // Convert the given ECParameterSpec object to a NamedCurve object.
     // If params does not represent a known named curve, return null.
     public static ECParameterSpec lookup(ECParameterSpec params) {
-        return sun.security.util.CurveDB.lookup(params);
+        if ((params instanceof NamedCurve) || (params == null)) {
+            return params;
+        }
+
+        int fieldSize = params.getCurve().getField().getFieldSize();
+        
+        for (NamedCurve namedCurve : sun.security.util.CurveDB.getSupportedCurves()) {
+            if (namedCurve.getCurve().getField().getFieldSize() != fieldSize) {
+                continue;
+            }
+            
+            if (namedCurve.getCurve().equals(params.getCurve()) == false) {
+                continue;
+            }
+            
+            if (namedCurve.getGenerator().equals(params.getGenerator()) == false) {
+                continue;
+            }
+            
+            if (namedCurve.getOrder().equals(params.getOrder()) == false) {
+                continue;
+            }
+            
+            if (namedCurve.getCofactor() != params.getCofactor()) {
+                continue;
+            }
+            
+            return namedCurve;
+        }
+        
+        return null;
     }
 }

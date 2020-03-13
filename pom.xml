@@ -69,7 +69,7 @@
         <java.version.file>src/main/java/org/openjsse/Version.java</java.version.file>
         <version.template.file>src/main/templates/VERSION.template</version.template.file>
         <version.file>src/main/resources/VERSION</version.file>
-        <jdk.version>1.8</jdk.version>
+        <jdk.version>11</jdk.version>
         <jdk.api>https://docs.oracle.com/javase/8/docs/api/</jdk.api>
         <jar.finalName>${project.artifactId}-${project.version}</jar.finalName>
         <build.output>${project.basedir}/target</build.output>
@@ -275,14 +275,15 @@
                     </archive>
                 </configuration>
             </plugin>
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
                     <excludePackageNames>org.openjsse.sun.*:org.openjsse.rsa.*:org.openjsse.com.*:org.openjsse:org.openjsse.net.*</excludePackageNames>
-                    <!-- force links to Java 8 documentation (should happen automatically
-                        but doesn't) -->
+                    <!- - force links to Java 8 documentation (should happen automatically
+                        but doesn't) - ->
                     <javaApiLinks>
                         <property>
                             <name>api_${jdk.version}</name>
@@ -330,6 +331,7 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -442,6 +444,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
@@ -456,6 +459,7 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>

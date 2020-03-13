@@ -126,6 +126,18 @@ final class SSLConfiguration implements Cloneable {
     static final boolean acknowledgeCloseNotify  = Utilities.getBooleanProperty(
             "jdk.tls.acknowledgeCloseNotify", false);
 
+    List<String> signatureAlgorithmsNames;
+
+    public List<String> getSignatureAlgorithmsNames() {
+        return signatureAlgorithmsNames;
+    }
+			
+	List<String> signatureAlgorithmsCertNames;	
+	
+	public List<String> getSignatureAlgorithmsCertNames() {
+		return signatureAlgorithmsCertNames;
+	}
+
     // Is the extended_master_secret extension supported?
     static {
         boolean supportExtendedMasterSecret = Utilities.getBooleanProperty(
@@ -214,6 +226,8 @@ final class SSLConfiguration implements Cloneable {
         params.setUseCipherSuitesOrder(this.preferLocalCipherSuites);
         params.setEnableRetransmissions(this.enableRetransmissions);
         params.setMaximumPacketSize(this.maximumPacketSize);
+        params.setSignatureAlgorithmsNames(this.signatureAlgorithmsNames);
+		params.setSignatureAlgorithmsCertNames(this.signatureAlgorithmsCertNames);
 
         return params;
     }
@@ -275,6 +289,8 @@ final class SSLConfiguration implements Cloneable {
 
             this.enableRetransmissions = ((org.openjsse.javax.net.ssl.SSLParameters)params).getEnableRetransmissions();
             this.maximumPacketSize = ((org.openjsse.javax.net.ssl.SSLParameters)params).getMaximumPacketSize();
+            this.signatureAlgorithmsNames = ((org.openjsse.javax.net.ssl.SSLParameters)params).getSignatureAlgorithmsNames();
+			this.signatureAlgorithmsCertNames = ((org.openjsse.javax.net.ssl.SSLParameters)params).getSignatureAlgorithmsCertNames();
         }
         this.preferLocalCipherSuites = params.getUseCipherSuitesOrder();
     }

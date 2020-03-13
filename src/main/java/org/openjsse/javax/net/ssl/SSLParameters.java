@@ -51,6 +51,8 @@
 
 package org.openjsse.javax.net.ssl;
 
+import org.openjsse.sun.security.ssl.SignatureSchemeMapper;
+
 import java.security.AlgorithmConstraints;
 import java.util.Map;
 import java.util.List;
@@ -99,6 +101,34 @@ public class SSLParameters extends javax.net.ssl.SSLParameters {
     private boolean enableRetransmissions = true;
     private int maximumPacketSize = 0;
     private String[] applicationProtocols = new String[0];
+
+    List<String> signatureAlgorithmsNames;
+
+    public List<String> getSignatureAlgorithmsNames() {
+        return signatureAlgorithmsNames;
+    }
+
+    public void setSignatureAlgorithmsNames(List<String> sigAlgNames) {
+        if (sigAlgNames != null) {
+            SignatureSchemeMapper.validateSchemeNames(sigAlgNames);
+        }
+
+        this.signatureAlgorithmsNames = sigAlgNames;
+    }
+
+	List<String> signatureAlgorithmsCertNames;
+	
+	public List<String> getSignatureAlgorithmsCertNames() {
+		return signatureAlgorithmsCertNames;
+	}
+	
+	public void setSignatureAlgorithmsCertNames(List<String> sigAlgNames) {
+        if (sigAlgNames != null) {
+            SignatureSchemeMapper.validateSchemeNames(sigAlgNames);
+        }
+
+		this.signatureAlgorithmsCertNames = sigAlgNames;
+	}
 
     /**
      * Constructs SSLParameters.
